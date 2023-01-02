@@ -9,3 +9,9 @@ CREATE TABLE users(
  UNIQUE(email)
 );
 
+
+    CREATE TABLE todos(
+    todo_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    todo VARCHAR(300) NOT NULL
+    );

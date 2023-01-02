@@ -27,7 +27,7 @@ const register = async (req, res) => {
 const assignToken = (userId) => {
   console.log("assigning token");
   return jwt.sign({ userId }, process.env.JWT_SECRET, {
-    expiresIn: "4m",
+    expiresIn: "2h",
   });
 };
 
@@ -50,10 +50,10 @@ const login = async (req, res) => {
       user_id: user.rows[0].user_id,
       first_name: user.rows[0].first_name,
       last_name: user.rows[0].last_name,
-      token: token,
     };
     res.send({
       userDataObject: userObject,
+      token: token,
       message: "login successful",
       status: "success",
     });
