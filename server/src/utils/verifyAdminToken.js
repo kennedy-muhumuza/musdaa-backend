@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
-const verifyToken = async (req, res, next) => {
+const verifyAdminToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   let token;
@@ -27,6 +27,15 @@ const verifyToken = async (req, res, next) => {
       });
     }
 
+    const isAdmin = user.rows[0].user_role === "admin";
+
+    if (!isAdmin) {
+      return res.send({
+        message: "You are not authorized to make this operation",
+        status: "fail",
+      });
+    }
+
     req.user = decoded;
   } catch (err) {
     console.log(err.message);
@@ -36,4 +45,4 @@ const verifyToken = async (req, res, next) => {
   return next();
 };
 
-module.exports = { verifyToken };
+module.exports = { verifyAdminToken };
