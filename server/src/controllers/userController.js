@@ -139,10 +139,14 @@ const login = async (req, res) => {
 
     const user = await User.findByEmail(email);
     if (!user.rows[0]) {
-      return res.send({ message: "Email Not registered", status: "fail" });
+      return res
+        .status(400)
+        .send({ message: "Email Not registered", status: "fail" });
     }
     if (!(await bcrypt.compare(password, user.rows[0].password))) {
-      return res.send({ message: "Incorrect password", status: "fail" });
+      return res
+        .status(400)
+        .send({ message: "Incorrect password", status: "fail" });
     }
 
     const token = assignToken(user.rows[0].user_id);
@@ -156,7 +160,7 @@ const login = async (req, res) => {
       telNumber: user.rows[0].tel_number,
       userRole: user.rows[0].user_role,
     };
-    res.send({
+    res.status(200).send({
       user: userObject,
       token: token,
       message: "login successful",
@@ -207,7 +211,14 @@ const generateAdminToken = async (req, res) => {
 
 const getAdminTokens = async (req, res) => {
   try {
-    const generatedById = req.body.generatedById;
+    // console.log("req.body");
+    // console.log(req.body);
+
+    // console.log(req.params);
+    console.log(req.query);
+    console.log(req.query);
+
+    const generatedById = req.query.generatedById;
     const getAdminTokens = await User.findTokenByGeneratedById(generatedById);
 
     res.send({ adminTokens: getAdminTokens.rows, status: "success" });
